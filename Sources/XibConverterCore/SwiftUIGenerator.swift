@@ -197,3 +197,86 @@ public enum SwiftUIGenerator {
             .replacingOccurrences(of: "\n", with: "\\n")
     }
 }
+
+// MARK: - SwiftUI Optimizer
+
+public enum SwiftUIOptimizer {
+    /// Simplifies generated SwiftUI code:
+    /// - Collapses single-child `Group { … }` wrappers
+    /// - Strips default `.foregroundStyle(.primary)` and `.opacity(1.00)` modifiers
+    /// - Compacts consecutive blank lines to a single blank line
+    public static func optimize(_ code: String) -> String {
+        var lines = code.components(separatedBy: "\n")
+
+        // 1. Collapse single-child Group wrappers
+        lines = collapseSingleChildGroups(lines)
+
+        // 2. Remove default / redundant modifiers
+        lines = lines.compactMap { line in
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if trimmed == ".foregroundStyle(.primary)" { return nil }
+            if trimmed == ".opacity(1.00)" { return nil }
+            // Also strip inline occurrences (rare, but be thorough)
+            var cleaned = line.replacingOccurrences(of: ".foregroundStyle(.primary)", with: "")
+            cleaned = cleaned.replacingOccurrences(of: ".opacity(1.00)", with: "")
+            return cleaned.trimmingCharacters(in: .whitespaces).isEmpty && trimmed.isEmpty ? line : cleaned
+        }
+
+        // 3. Compact consecutive blank lines
+        var result: [String] = []
+        var prevBlank = false
+        for line in lines {
+            let blank = line.trimmingCharacters(in: .whitespaces).isEmpty
+            if blank {
+                if !prevBlank { result.append("") }
+                prevBlank = true
+            } else {
+                result.append(line)
+                prevBlank = false
+            }
+        }
+
+        return result.joined(separator: "\n")
+    }
+
+    private static func collapseSingleChildGroups(_ lines: [String]) -> [String] {
+        var out: [String] = []
+        var i = 0
+        while i < lines.count {
+            let line = lines[i]
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+
+            // Match "Group {"
+            if trimmed == "Group {" {
+                let indent = String(line.prefix(while: { $0 == " " }))
+                // Scan for content lines and closing brace
+                var j = i + 1
+                var contentLines: [String] = []
+                var foundClose = false
+                while j < lines.count {
+                    let inner = lines[j]
+                    let innerTrimmed = inner.trimmingCharacters(in: .whitespaces)
+                    if innerTrimmed == "}" && inner.prefix(while: { $0 == " " }) == indent[...] {
+                        foundClose = true
+                        break
+                    }
+                    if !innerTrimmed.isEmpty {
+                        contentLines.append(inner)
+                    }
+                    j += 1
+                }
+                // If exactly one content line, collapse
+                if foundClose && contentLines.count == 1 {
+                    // Re-indent child to Group's indentation level
+                    let childTrimmed = contentLines[0].trimmingCharacters(in: .whitespaces)
+                    out.append(indent + childTrimmed)
+                    i = j + 1
+                    continue
+                }
+            }
+            out.append(line)
+            i += 1
+        }
+        return out
+    }
+}

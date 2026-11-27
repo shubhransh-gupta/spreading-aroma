@@ -87,3 +87,81 @@ import Testing
     try SampleXib.exportAsZip(converted, to: exportZipURL)
     #expect(FileManager.default.fileExists(atPath: exportZipURL.path))
 }
+
+// MARK: - SwiftUI Optimizer Tests
+
+@Test func optimizerCollapsesRedundantSingleChildGroup() {
+    let input = """
+        Group {
+            Text("Hello")
+        }
+    """
+    let optimized = SwiftUIOptimizer.optimize(input)
+    #expect(!optimized.contains("Group {"))
+    #expect(optimized.contains("Text(\"Hello\")"))
+}
+
+@Test func optimizerStripsDefaultForegroundStylePrimary() {
+    let input = """
+    Text("Hello")
+    .foregroundStyle(.primary)
+    .font(.body)
+    """
+    let optimized = SwiftUIOptimizer.optimize(input)
+    #expect(!optimized.contains(".foregroundStyle(.primary)"))
+    #expect(optimized.contains(".font(.body)"))
+}
+
+@Test func optimizerStripsDefaultOpacity() {
+    let input = """
+    Image(systemName: "star")
+    .opacity(1.00)
+    .resizable()
+    """
+    let optimized = SwiftUIOptimizer.optimize(input)
+    #expect(!optimized.contains(".opacity(1.00)"))
+    #expect(optimized.contains(".resizable()"))
+}
+
+@Test func optimizerCompactsConsecutiveBlankLines() {
+    let input = "Text(\"A\")\n\n\n\n\nText(\"B\")"
+    let optimized = SwiftUIOptimizer.optimize(input)
+    // Should have at most one blank line between A and B
+    #expect(!optimized.contains("\n\n\n"))
+    #expect(optimized.contains("Text(\"A\")"))
+    #expect(optimized.contains("Text(\"B\")"))
+}
+
+@Test func optimizerPreservesValidStructViewOutput() {
+    let input = """
+    import SwiftUI
+
+    struct MyView: View {
+        var body: some View {
+            VStack(spacing: 16) {
+                Text("Hello")
+                Button("Go") { }
+            }
+        }
+    }
+    """
+    let optimized = SwiftUIOptimizer.optimize(input)
+    #expect(optimized.contains("struct MyView: View"))
+    #expect(optimized.contains("VStack(spacing: 16)"))
+    #expect(optimized.contains("Text(\"Hello\")"))
+    #expect(optimized.contains("Button(\"Go\")"))
+}
+
+@Test func optimizerDoesNotCollapseMultiChildGroup() {
+    let input = """
+        Group {
+            Text("A")
+            Text("B")
+        }
+    """
+    let optimized = SwiftUIOptimizer.optimize(input)
+    // Multi-child Group should NOT be collapsed
+    #expect(optimized.contains("Group {"))
+    #expect(optimized.contains("Text(\"A\")"))
+    #expect(optimized.contains("Text(\"B\")"))
+}
