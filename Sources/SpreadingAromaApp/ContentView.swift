@@ -85,7 +85,7 @@ struct ContentView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(item.fileName)
                             .font(.headline)
-                        Text("\(item.suggestedSwiftFileName) • \(item.elementCount) nodes")
+                        Text("\(item.suggestedSwiftFileName) • \(item.elementCount) nodes • \(item.lineCount) lines")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

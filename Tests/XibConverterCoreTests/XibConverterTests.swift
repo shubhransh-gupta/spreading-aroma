@@ -6,6 +6,7 @@ import Testing
     let converted = try SampleXib.makeSampleConvertedFile()
     #expect(converted.suggestedSwiftFileName == "LoginView.swift")
     #expect(converted.elementCount >= 8)
+    #expect(converted.lineCount > 10)
     #expect(converted.swiftUICode.contains("struct LoginView: View"))
     #expect(converted.swiftUICode.contains("@State private var textField1: String"))
     #expect(converted.swiftUICode.contains("@State private var isOn2: Bool = true"))
