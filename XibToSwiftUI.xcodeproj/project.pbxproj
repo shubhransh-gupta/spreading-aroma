@@ -1,0 +1,452 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA000001 /* XibToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000001 /* XibToSwiftUIApp.swift */; };
+		AA000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000002 /* ContentView.swift */; };
+		AA000003 /* ConverterStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000003 /* ConverterStore.swift */; };
+		AA000004 /* XibNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000004 /* XibNode.swift */; };
+		AA000005 /* ZipExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000005 /* ZipExtractor.swift */; };
+		AA000006 /* XibParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000006 /* XibParser.swift */; };
+		AA000007 /* SwiftUIGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000007 /* SwiftUIGenerator.swift */; };
+		AA000008 /* SampleXib.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000008 /* SampleXib.swift */; };
+		AA000009 /* XibConverterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC000002 /* XibConverterCore.framework */; };
+		AA000010 /* XibConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000009 /* XibConverterTests.swift */; };
+		AA000011 /* XibConverterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC000002 /* XibConverterCore.framework */; };
+		AA000012 /* XibConverterCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CC000002 /* XibConverterCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DD000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EE000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = TT000002 /* XibConverterCore */;
+			remoteInfo = XibConverterCore;
+		};
+		DD000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EE000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = TT000002 /* XibConverterCore */;
+			remoteInfo = XibConverterCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FF000001 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				AA000012 /* XibConverterCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BB000001 /* XibToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibToSwiftUIApp.swift; sourceTree = "<group>"; };
+		BB000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BB000003 /* ConverterStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterStore.swift; sourceTree = "<group>"; };
+		BB000004 /* XibNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibNode.swift; sourceTree = "<group>"; };
+		BB000005 /* ZipExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipExtractor.swift; sourceTree = "<group>"; };
+		BB000006 /* XibParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibParser.swift; sourceTree = "<group>"; };
+		BB000007 /* SwiftUIGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIGenerator.swift; sourceTree = "<group>"; };
+		BB000008 /* SampleXib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleXib.swift; sourceTree = "<group>"; };
+		BB000009 /* XibConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibConverterTests.swift; sourceTree = "<group>"; };
+		CC000001 /* XibToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XibToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC000002 /* XibConverterCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibConverterCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC000003 /* XibConverterCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XibConverterCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FW000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000009 /* XibConverterCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FW000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FW000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000011 /* XibConverterCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		GG000001 = {
+			isa = PBXGroup;
+			children = (
+				GG000002 /* Sources */,
+				GG000005 /* Tests */,
+				GG000007 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		GG000002 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				GG000003 /* XibToSwiftUIApp */,
+				GG000004 /* XibConverterCore */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		GG000003 /* XibToSwiftUIApp */ = {
+			isa = PBXGroup;
+			children = (
+				BB000001 /* XibToSwiftUIApp.swift */,
+				BB000002 /* ContentView.swift */,
+				BB000003 /* ConverterStore.swift */,
+			);
+			path = XibToSwiftUIApp;
+			sourceTree = "<group>";
+		};
+		GG000004 /* XibConverterCore */ = {
+			isa = PBXGroup;
+			children = (
+				BB000004 /* XibNode.swift */,
+				BB000005 /* ZipExtractor.swift */,
+				BB000006 /* XibParser.swift */,
+				BB000007 /* SwiftUIGenerator.swift */,
+				BB000008 /* SampleXib.swift */,
+			);
+			path = XibConverterCore;
+			sourceTree = "<group>";
+		};
+		GG000005 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				GG000006 /* XibConverterCoreTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		GG000006 /* XibConverterCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				BB000009 /* XibConverterTests.swift */,
+			);
+			path = XibConverterCoreTests;
+			sourceTree = "<group>";
+		};
+		GG000007 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CC000001 /* XibToSwiftUI.app */,
+				CC000002 /* XibConverterCore.framework */,
+				CC000003 /* XibConverterCoreTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		TT000001 /* XibToSwiftUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CL000002 /* Build configuration list for PBXNativeTarget "XibToSwiftUI" */;
+			buildPhases = (
+				SR000001 /* Sources */,
+				FW000001 /* Frameworks */,
+				FF000001 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DP000001 /* PBXTargetDependency */,
+			);
+			name = XibToSwiftUI;
+			productName = XibToSwiftUI;
+			productReference = CC000001 /* XibToSwiftUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		TT000002 /* XibConverterCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CL000003 /* Build configuration list for PBXNativeTarget "XibConverterCore" */;
+			buildPhases = (
+				SR000002 /* Sources */,
+				FW000002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XibConverterCore;
+			productName = XibConverterCore;
+			productReference = CC000002 /* XibConverterCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		TT000003 /* XibConverterCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CL000004 /* Build configuration list for PBXNativeTarget "XibConverterCoreTests" */;
+			buildPhases = (
+				SR000003 /* Sources */,
+				FW000003 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DP000002 /* PBXTargetDependency */,
+			);
+			name = XibConverterCoreTests;
+			productName = XibConverterCoreTests;
+			productReference = CC000003 /* XibConverterCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EE000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+			};
+			buildConfigurationList = CL000001 /* Build configuration list for PBXProject "XibToSwiftUI" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = GG000001;
+			productRefGroup = GG000007 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				TT000001 /* XibToSwiftUI */,
+				TT000002 /* XibConverterCore */,
+				TT000003 /* XibConverterCoreTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		SR000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001 /* XibToSwiftUIApp.swift in Sources */,
+				AA000002 /* ContentView.swift in Sources */,
+				AA000003 /* ConverterStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SR000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000004 /* XibNode.swift in Sources */,
+				AA000005 /* ZipExtractor.swift in Sources */,
+				AA000006 /* XibParser.swift in Sources */,
+				AA000007 /* SwiftUIGenerator.swift in Sources */,
+				AA000008 /* SampleXib.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		SR000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000010 /* XibConverterTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DP000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = TT000002 /* XibConverterCore */;
+			targetProxy = DD000001 /* PBXContainerItemProxy */;
+		};
+		DP000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = TT000002 /* XibConverterCore */;
+			targetProxy = DD000002 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		BC000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		BC000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		BC000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibToSwiftUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		BC000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibToSwiftUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		BC000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibConverterCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+			};
+			name = Debug;
+		};
+		BC000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibConverterCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+			};
+			name = Release;
+		};
+		BC000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTING_SEARCH_PATHS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibConverterCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BC000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibConverterCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CL000001 /* Build configuration list for PBXProject "XibToSwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC000001 /* Debug */,
+				BC000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CL000002 /* Build configuration list for PBXNativeTarget "XibToSwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC000003 /* Debug */,
+				BC000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CL000003 /* Build configuration list for PBXNativeTarget "XibConverterCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC000005 /* Debug */,
+				BC000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CL000004 /* Build configuration list for PBXNativeTarget "XibConverterCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC000007 /* Debug */,
+				BC000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = EE000001 /* Project object */;
+}
