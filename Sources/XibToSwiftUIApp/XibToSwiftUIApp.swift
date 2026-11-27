@@ -4,8 +4,8 @@ import SwiftUI
 struct XibToSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("XibToSwiftUI")
-                .padding()
+            ContentView()
+                .frame(minWidth: 880, minHeight: 560)
         }
     }
 }
