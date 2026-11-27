@@ -5,10 +5,21 @@ on:
     types: [opened, synchronize, labeled]
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request number to implement/verify'
+        required: true
+        type: string
+      provider:
+        description: 'LLM provider (gemini, anthropic, openai, deepseek)'
+        required: false
+        default: 'gemini'
 
 jobs:
   forge:
     if: |
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/forge')) ||
       (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'pr-forge'))
     runs-on: macos-latest
@@ -21,13 +32,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run PR Forge
+      - name: Run PR Forge (GitHub Marketplace Action)
         uses: shubhransh-gupta/pr-forge@v1
         with:
           api-key: ${{ secrets.GEMINI_API_KEY }}
           figma-token: ${{ secrets.FIGMA_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          provider: gemini
+          pr-number: ${{ inputs.pr_number }}
+          provider: ${{ inputs.provider || 'gemini' }}
+          test-command: 'swift test'
           max-iterations: '6'
           auto-commit: 'true'
           post-comment: 'true'

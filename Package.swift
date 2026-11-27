@@ -2,16 +2,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "XibToSwiftUI",
+    name: "SpreadingAroma",
     platforms: [.macOS(.v15)],
     products: [
         .library(name: "XibConverterCore", targets: ["XibConverterCore"]),
-        .executable(name: "XibToSwiftUIApp", targets: ["XibToSwiftUIApp"]),
+        .executable(name: "SpreadingAromaApp", targets: ["SpreadingAromaApp"]),
     ],
     targets: [
         .target(name: "XibConverterCore"),
         .executableTarget(
-            name: "XibToSwiftUIApp",
+            name: "SpreadingAromaApp",
             dependencies: ["XibConverterCore"]
         ),
         .testTarget(

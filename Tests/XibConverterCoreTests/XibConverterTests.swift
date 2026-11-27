@@ -2,23 +2,26 @@ import Foundation
 import Testing
 @testable import XibConverterCore
 
-@Test func parsesAndConvertsSampleLoginXib() throws {
+@Test func parsesAndConvertsSampleLoginXibWithRichAttributes() throws {
     let converted = try SampleXib.makeSampleConvertedFile()
     #expect(converted.suggestedSwiftFileName == "LoginView.swift")
-    #expect(converted.elementCount >= 7)
+    #expect(converted.elementCount >= 8)
     #expect(converted.swiftUICode.contains("struct LoginView: View"))
     #expect(converted.swiftUICode.contains("@State private var textField1: String"))
     #expect(converted.swiftUICode.contains("@State private var isOn2: Bool = true"))
     #expect(converted.swiftUICode.contains("VStack(spacing: 16)"))
-    #expect(converted.swiftUICode.contains("Image(systemName: \"lock.shield.fill\")"))
-    #expect(converted.swiftUICode.contains("Text(\"Welcome Back\")"))
-    #expect(converted.swiftUICode.contains("Button(\"Sign In\")"))
+    #expect(converted.swiftUICode.contains("Image(systemName: \"flame.fill\")"))
+    #expect(converted.swiftUICode.contains("Text(\"Spreading Aroma\")"))
+    #expect(converted.swiftUICode.contains(".lineLimit(1)"))
+    #expect(converted.swiftUICode.contains(".multilineTextAlignment(.center)"))
+    #expect(converted.swiftUICode.contains(".opacity(0.85)"))
+    #expect(converted.swiftUICode.contains("Button(\"Start Cooking\")"))
     #expect(converted.swiftUICode.contains("#Preview"))
 }
 
-@Test func extractsRealZipArchiveSkippingMacOSXAndConvertsAllXibs() throws {
+@Test func extractsRealZipConvertsXibsAndExportsZipRoundTrip() throws {
     let tempRoot = FileManager.default.temporaryDirectory
-        .appendingPathComponent("xib-zip-test-\(UUID().uuidString)", isDirectory: true)
+        .appendingPathComponent("aroma-zip-test-\(UUID().uuidString)", isDirectory: true)
     let inputDir = tempRoot.appendingPathComponent("input", isDirectory: true)
     let nestedDir = inputDir.appendingPathComponent("Screens", isDirectory: true)
     let macosJunk = inputDir.appendingPathComponent("__MACOSX", isDirectory: true)
@@ -45,6 +48,8 @@ import Testing
                                 </segments>
                             </segmentedControl>
                             <slider id="sl-1" value="0.4" minValue="0" maxValue="10"/>
+                            <label id="hid-1" text="Secret" hidden="YES"/>
+                            <imageView id="im-1" image="hero" contentMode="scaleAspectFill"/>
                         </subviews>
                     </stackView>
                 </subviews>
@@ -75,11 +80,10 @@ import Testing
     #expect(profile.swiftUICode.contains("HStack(spacing: 8)"))
     #expect(profile.swiftUICode.contains(".pickerStyle(.segmented)"))
     #expect(profile.swiftUICode.contains("Slider(value: $sliderValue2, in: 0.0...10.0)"))
+    #expect(profile.swiftUICode.contains(".hidden()"))
+    #expect(profile.swiftUICode.contains(".scaledToFill()"))
 
-    let exportDir = tempRoot.appendingPathComponent("out", isDirectory: true)
-    try FileManager.default.createDirectory(at: exportDir, withIntermediateDirectories: true)
-    let exported = try SampleXib.exportAll(converted, to: exportDir)
-    #expect(exported.count == 2)
-    #expect(FileManager.default.fileExists(atPath: exportDir.appendingPathComponent("LoginView.swift").path))
-    #expect(FileManager.default.fileExists(atPath: exportDir.appendingPathComponent("ProfileCardView.swift").path))
+    let exportZipURL = tempRoot.appendingPathComponent("SpreadingAroma-SwiftUI.zip")
+    try SampleXib.exportAsZip(converted, to: exportZipURL)
+    #expect(FileManager.default.fileExists(atPath: exportZipURL.path))
 }

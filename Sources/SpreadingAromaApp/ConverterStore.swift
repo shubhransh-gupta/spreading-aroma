@@ -1,19 +1,41 @@
 import AppKit
 import Foundation
 import Observation
+import UniformTypeIdentifiers
 import XibConverterCore
+
+enum InspectorMode: String, CaseIterable, Identifiable {
+    case preview = "Live Preview"
+    case hierarchy = "Hierarchy"
+    case xml = "XIB XML"
+
+    var id: String { rawValue }
+}
 
 @MainActor
 @Observable
 final class ConverterStore {
     var files: [ConvertedXibFile] = []
     var selectedFileID: ConvertedXibFile.ID?
+    var searchQuery: String = ""
+    var inspectorMode: InspectorMode = .preview
     var statusMessage: String = "Drop a .zip of .xib files or upload directly."
     var errorMessage: String?
-    var showRawXML: Bool = false
+
+    var filteredFiles: [ConvertedXibFile] {
+        guard !searchQuery.trimmingCharacters(in: .whitespaces).isEmpty else { return files }
+        return files.filter {
+            $0.fileName.localizedCaseInsensitiveContains(searchQuery) ||
+            $0.suggestedSwiftFileName.localizedCaseInsensitiveContains(searchQuery)
+        }
+    }
 
     var selectedFile: ConvertedXibFile? {
-        files.first { $0.id == selectedFileID } ?? files.first
+        filteredFiles.first { $0.id == selectedFileID } ?? filteredFiles.first
+    }
+
+    var totalElementCount: Int {
+        files.reduce(0) { $0 + $1.elementCount }
     }
 
     func importURLs(_ urls: [URL]) {
@@ -23,7 +45,7 @@ final class ConverterStore {
             let converted = try xibURLs.map(XibParser.convert(url:))
             files = converted
             selectedFileID = converted.first?.id
-            statusMessage = "Converted \(converted.count) XIB file(s) head-to-head into SwiftUI."
+            statusMessage = "Infused \(converted.count) XIB file(s) (\(totalElementCount) nodes) into SwiftUI."
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -59,6 +81,21 @@ final class ConverterStore {
         do {
             let exported = try SampleXib.exportAll(files, to: dir)
             statusMessage = "Exported \(exported.count) SwiftUI file(s) to \(dir.lastPathComponent)."
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func exportAsZip() {
+        guard !files.isEmpty else { return }
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.zip]
+        panel.nameFieldStringValue = "SpreadingAroma-SwiftUI.zip"
+        panel.prompt = "Export .zip"
+        guard panel.runModal() == .OK, let destURL = panel.url else { return }
+        do {
+            try SampleXib.exportAsZip(files, to: destURL)
+            statusMessage = "Packaged \(files.count) SwiftUI file(s) into \(destURL.lastPathComponent)."
         } catch {
             errorMessage = error.localizedDescription
         }
