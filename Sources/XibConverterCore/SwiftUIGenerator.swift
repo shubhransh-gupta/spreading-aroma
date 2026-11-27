@@ -92,8 +92,7 @@ public enum SwiftUIGenerator {
             lines.append("\(pad).glassEffect(in: .rect(cornerRadius: \(Int((node.cornerRadius ?? 16).rounded()))))")
 
         case .label:
-            let escaped = escape(node.text ?? "Label")
-            lines.append("\(pad)Text(\"\(escaped)\")")
+            lines.append("\(pad)Text(\"\(escape(node.text ?? "Label"))\")")
 
         case .button:
             let escaped = escape(node.text ?? "Button")
@@ -117,7 +116,7 @@ public enum SwiftUIGenerator {
             let name = escape(node.imageName ?? "photo")
             lines.append(node.isSystemSymbol ? "\(pad)Image(systemName: \"\(name)\")" : "\(pad)Image(\"\(name)\")")
             lines.append("\(pad).resizable()")
-            lines.append("\(pad).scaledToFit()")
+            lines.append(node.contentMode == "scaleAspectFill" ? "\(pad).scaledToFill()" : "\(pad).scaledToFit()")
 
         case .switch:
             let varName = state.nextVar(prefix: "isOn", type: "Bool", initialValue: node.isOn ? "true" : "false")
@@ -163,6 +162,10 @@ public enum SwiftUIGenerator {
     private static func modifiers(for node: XibNode, pad: String) -> [String] {
         var mods: [String] = []
         if let font = node.font { mods.append("\(pad)\(font.swiftUIModifier)") }
+        if let lines = node.numberOfLines, lines > 0 { mods.append("\(pad).lineLimit(\(lines))") }
+        if let align = node.textAlignment, let mapped = alignmentMap[align] {
+            mods.append("\(pad).multilineTextAlignment(\(mapped))")
+        }
         if let fg = node.textColor { mods.append("\(pad).foregroundStyle(\(fg.swiftUIExpression))") }
         if let tint = node.tintColor { mods.append("\(pad).tint(\(tint.swiftUIExpression))") }
         if let bg = node.backgroundColor, bg.systemName != "clearColor" {
@@ -171,11 +174,22 @@ public enum SwiftUIGenerator {
         if let radius = node.cornerRadius, node.kind != .visualEffectView {
             mods.append("\(pad).clipShape(.rect(cornerRadius: \(Int(radius.rounded()))))")
         }
-        if node.kind != .view, let w = node.width, let h = node.height, w > 0, h > 0, node.kind == .imageView {
+        if node.kind == .imageView, let w = node.width, let h = node.height, w > 0, h > 0 {
             mods.append("\(pad).frame(width: \(Int(w.rounded())), height: \(Int(h.rounded())))")
+        }
+        if node.isHidden {
+            mods.append("\(pad).hidden()")
+        } else if node.alpha < 0.99 {
+            mods.append(String(format: "\(pad).opacity(%.2f)", node.alpha))
         }
         return mods
     }
+
+    private static let alignmentMap: [String: String] = [
+        "center": ".center",
+        "right": ".trailing",
+        "left": ".leading",
+    ]
 
     private static func escape(_ text: String) -> String {
         text.replacingOccurrences(of: "\\", with: "\\\\")

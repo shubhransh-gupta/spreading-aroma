@@ -1,11 +1,11 @@
 import SwiftUI
 
 @main
-struct XibToSwiftUIApp: App {
+struct SpreadingAromaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .frame(minWidth: 880, minHeight: 560)
+                .frame(minWidth: 940, minHeight: 600)
         }
     }
 }

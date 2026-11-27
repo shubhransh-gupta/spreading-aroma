@@ -1,0 +1,17 @@
+name: Spreading Aroma Xcode & Swift CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run SwiftPM Tests
+        run: swift test
+      - name: Build & Test Native macOS Xcode App
+        run: xcodebuild -project SpreadingAroma.xcodeproj -scheme SpreadingAroma -destination 'platform=macOS' build test

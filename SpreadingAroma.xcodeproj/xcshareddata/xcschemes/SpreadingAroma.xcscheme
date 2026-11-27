@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "TT000001"
-               BuildableName = "XibToSwiftUI.app"
-               BlueprintName = "XibToSwiftUI"
-               ReferencedContainer = "container:XibToSwiftUI.xcodeproj">
+               BuildableName = "SpreadingAroma.app"
+               BlueprintName = "SpreadingAroma"
+               ReferencedContainer = "container:SpreadingAroma.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "TT000003"
                BuildableName = "XibConverterCoreTests.xctest"
                BlueprintName = "XibConverterCoreTests"
-               ReferencedContainer = "container:XibToSwiftUI.xcodeproj">
+               ReferencedContainer = "container:SpreadingAroma.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "TT000001"
-            BuildableName = "XibToSwiftUI.app"
-            BlueprintName = "XibToSwiftUI"
-            ReferencedContainer = "container:XibToSwiftUI.xcodeproj">
+            BuildableName = "SpreadingAroma.app"
+            BlueprintName = "SpreadingAroma"
+            ReferencedContainer = "container:SpreadingAroma.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>

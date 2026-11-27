@@ -64,10 +64,7 @@ public final class XibParser: NSObject, XMLParserDelegate {
             inObjects = true
             return
         }
-        guard inObjects else { return }
-
-        // Ignore Interface Builder placeholder proxies
-        if elementName == "placeholder" { return }
+        guard inObjects, elementName != "placeholder" else { return }
 
         if let kind = Self.viewTags[elementName] {
             var node = XibNode(id: attributeDict["id"] ?? UUID().uuidString, kind: kind)
@@ -78,6 +75,11 @@ public final class XibParser: NSObject, XMLParserDelegate {
             node.spacing = attributeDict["spacing"].flatMap(Double.init)
             node.imageName = attributeDict["image"]
             node.isSystemSymbol = attributeDict["catalog"] == "system"
+            node.alpha = attributeDict["alpha"].flatMap(Double.init) ?? 1.0
+            node.isHidden = attributeDict["hidden"] == "YES"
+            node.numberOfLines = attributeDict["numberOfLines"].flatMap(Int.init)
+            node.textAlignment = attributeDict["textAlignment"]
+            node.contentMode = attributeDict["contentMode"]
             node.isOn = attributeDict["on"] == "YES"
             node.sliderValue = attributeDict["value"].flatMap(Double.init) ?? 0.5
             node.minValue = attributeDict["minValue"].flatMap(Double.init) ?? 0

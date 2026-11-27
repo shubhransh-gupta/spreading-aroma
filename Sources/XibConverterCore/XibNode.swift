@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 public enum XibElementKind: String, Sendable, Hashable {
     case view, label, button, textField, textView, imageView, stackView
@@ -23,21 +24,8 @@ public struct XibColor: Sendable, Hashable {
     }
 
     public var swiftUIExpression: String {
-        if let systemName {
-            let mapped: [String: String] = [
-                "labelColor": ".primary",
-                "secondaryLabelColor": ".secondary",
-                "systemBackgroundColor": "Color(.windowBackgroundColor)",
-                "systemBlueColor": ".blue",
-                "systemRedColor": ".red",
-                "systemGreenColor": ".green",
-                "systemOrangeColor": ".orange",
-                "systemIndigoColor": ".indigo",
-                "systemPurpleColor": ".purple",
-                "systemGrayColor": ".gray",
-                "clearColor": ".clear",
-            ]
-            if let direct = mapped[systemName] { return direct }
+        if let systemName, let direct = Self.systemExprMap[systemName] {
+            return direct
         }
         if let r = red, let g = green, let b = blue {
             let base = String(format: "Color(red: %.3f, green: %.3f, blue: %.3f)", r, g, b)
@@ -45,6 +33,46 @@ public struct XibColor: Sendable, Hashable {
         }
         return ".primary"
     }
+
+    public var swiftUIColor: Color {
+        if let systemName, let direct = Self.systemColorMap[systemName] {
+            return direct
+        }
+        if let r = red, let g = green, let b = blue {
+            return Color(red: r, green: g, blue: b).opacity(alpha)
+        }
+        return .primary
+    }
+
+    private static let systemExprMap: [String: String] = [
+        "labelColor": ".primary",
+        "secondaryLabelColor": ".secondary",
+        "systemBackgroundColor": "Color(.windowBackgroundColor)",
+        "secondarySystemBackgroundColor": "Color(.controlBackgroundColor)",
+        "systemBlueColor": ".blue",
+        "systemRedColor": ".red",
+        "systemGreenColor": ".green",
+        "systemOrangeColor": ".orange",
+        "systemIndigoColor": ".indigo",
+        "systemPurpleColor": ".purple",
+        "systemGrayColor": ".gray",
+        "clearColor": ".clear",
+    ]
+
+    private static let systemColorMap: [String: Color] = [
+        "labelColor": .primary,
+        "secondaryLabelColor": .secondary,
+        "systemBackgroundColor": Color(.windowBackgroundColor),
+        "secondarySystemBackgroundColor": Color(.controlBackgroundColor),
+        "systemBlueColor": .blue,
+        "systemRedColor": .red,
+        "systemGreenColor": .green,
+        "systemOrangeColor": .orange,
+        "systemIndigoColor": .indigo,
+        "systemPurpleColor": .purple,
+        "systemGrayColor": .gray,
+        "clearColor": .clear,
+    ]
 }
 
 public struct XibFont: Sendable, Hashable {
@@ -66,10 +94,24 @@ public struct XibFont: Sendable, Hashable {
         return ".font(.system(size: \(Int(pointSize.rounded()))\(weightExpr)))"
     }
 
+    public var swiftUIFont: Font {
+        if let textStyle, let mapped = Self.fontValueMap[textStyle] {
+            return mapped
+        }
+        let w = weight.flatMap { Self.fontWeightMap[$0] } ?? .regular
+        return .system(size: pointSize, weight: w)
+    }
+
     private static let weightMap: [String: String] = [
         "ultraLight": ".ultraLight", "thin": ".thin", "light": ".light",
         "regular": ".regular", "medium": ".medium", "semibold": ".semibold",
         "bold": ".bold", "heavy": ".heavy", "black": ".black",
+    ]
+
+    private static let fontWeightMap: [String: Font.Weight] = [
+        "ultraLight": .ultraLight, "thin": .thin, "light": .light,
+        "regular": .regular, "medium": .medium, "semibold": .semibold,
+        "bold": .bold, "heavy": .heavy, "black": .black,
     ]
 
     private static let styleMap: [String: String] = [
@@ -84,6 +126,20 @@ public struct XibFont: Sendable, Hashable {
         "UICTFontTextStyleFootnote": ".footnote",
         "UICTFontTextStyleCaption1": ".caption",
         "UICTFontTextStyleCaption2": ".caption2",
+    ]
+
+    private static let fontValueMap: [String: Font] = [
+        "UICTFontTextStyleLargeTitle": .largeTitle,
+        "UICTFontTextStyleTitle1": .title,
+        "UICTFontTextStyleTitle2": .title2,
+        "UICTFontTextStyleTitle3": .title3,
+        "UICTFontTextStyleHeadline": .headline,
+        "UICTFontTextStyleSubhead": .subheadline,
+        "UICTFontTextStyleBody": .body,
+        "UICTFontTextStyleCallout": .callout,
+        "UICTFontTextStyleFootnote": .footnote,
+        "UICTFontTextStyleCaption1": .caption,
+        "UICTFontTextStyleCaption2": .caption2,
     ]
 }
 
@@ -100,6 +156,11 @@ public struct XibNode: Identifiable, Sendable, Hashable {
     public var cornerRadius: Double?
     public var width: Double?
     public var height: Double?
+    public var alpha: Double = 1.0
+    public var isHidden: Bool = false
+    public var numberOfLines: Int?
+    public var textAlignment: String?
+    public var contentMode: String?
     public var isOn: Bool = false
     public var sliderValue: Double = 0.5
     public var minValue: Double = 0

@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA000001 /* XibToSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000001 /* XibToSwiftUIApp.swift */; };
+		AA000001 /* SpreadingAromaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000001 /* SpreadingAromaApp.swift */; };
 		AA000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000002 /* ContentView.swift */; };
 		AA000003 /* ConverterStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000003 /* ConverterStore.swift */; };
+		AA000013 /* XibLivePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000010 /* XibLivePreview.swift */; };
 		AA000004 /* XibNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000004 /* XibNode.swift */; };
 		AA000005 /* ZipExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000005 /* ZipExtractor.swift */; };
 		AA000006 /* XibParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB000006 /* XibParser.swift */; };
@@ -53,16 +54,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		BB000001 /* XibToSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibToSwiftUIApp.swift; sourceTree = "<group>"; };
+		BB000001 /* SpreadingAromaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadingAromaApp.swift; sourceTree = "<group>"; };
 		BB000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BB000003 /* ConverterStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterStore.swift; sourceTree = "<group>"; };
+		BB000010 /* XibLivePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibLivePreview.swift; sourceTree = "<group>"; };
 		BB000004 /* XibNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibNode.swift; sourceTree = "<group>"; };
 		BB000005 /* ZipExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipExtractor.swift; sourceTree = "<group>"; };
 		BB000006 /* XibParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibParser.swift; sourceTree = "<group>"; };
 		BB000007 /* SwiftUIGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIGenerator.swift; sourceTree = "<group>"; };
 		BB000008 /* SampleXib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleXib.swift; sourceTree = "<group>"; };
 		BB000009 /* XibConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibConverterTests.swift; sourceTree = "<group>"; };
-		CC000001 /* XibToSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XibToSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC000001 /* SpreadingAroma.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpreadingAroma.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC000002 /* XibConverterCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XibConverterCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC000003 /* XibConverterCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XibConverterCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -106,20 +108,21 @@
 		GG000002 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				GG000003 /* XibToSwiftUIApp */,
+				GG000003 /* SpreadingAromaApp */,
 				GG000004 /* XibConverterCore */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		GG000003 /* XibToSwiftUIApp */ = {
+		GG000003 /* SpreadingAromaApp */ = {
 			isa = PBXGroup;
 			children = (
-				BB000001 /* XibToSwiftUIApp.swift */,
+				BB000001 /* SpreadingAromaApp.swift */,
 				BB000002 /* ContentView.swift */,
 				BB000003 /* ConverterStore.swift */,
+				BB000010 /* XibLivePreview.swift */,
 			);
-			path = XibToSwiftUIApp;
+			path = SpreadingAromaApp;
 			sourceTree = "<group>";
 		};
 		GG000004 /* XibConverterCore */ = {
@@ -153,7 +156,7 @@
 		GG000007 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CC000001 /* XibToSwiftUI.app */,
+				CC000001 /* SpreadingAroma.app */,
 				CC000002 /* XibConverterCore.framework */,
 				CC000003 /* XibConverterCoreTests.xctest */,
 			);
@@ -163,9 +166,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		TT000001 /* XibToSwiftUI */ = {
+		TT000001 /* SpreadingAroma */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CL000002 /* Build configuration list for PBXNativeTarget "XibToSwiftUI" */;
+			buildConfigurationList = CL000002 /* Build configuration list for PBXNativeTarget "SpreadingAroma" */;
 			buildPhases = (
 				SR000001 /* Sources */,
 				FW000001 /* Frameworks */,
@@ -176,9 +179,9 @@
 			dependencies = (
 				DP000001 /* PBXTargetDependency */,
 			);
-			name = XibToSwiftUI;
-			productName = XibToSwiftUI;
-			productReference = CC000001 /* XibToSwiftUI.app */;
+			name = SpreadingAroma;
+			productName = SpreadingAroma;
+			productReference = CC000001 /* SpreadingAroma.app */;
 			productType = "com.apple.product-type.application";
 		};
 		TT000002 /* XibConverterCore */ = {
@@ -224,7 +227,7 @@
 				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2700;
 			};
-			buildConfigurationList = CL000001 /* Build configuration list for PBXProject "XibToSwiftUI" */;
+			buildConfigurationList = CL000001 /* Build configuration list for PBXProject "SpreadingAroma" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -237,7 +240,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				TT000001 /* XibToSwiftUI */,
+				TT000001 /* SpreadingAroma */,
 				TT000002 /* XibConverterCore */,
 				TT000003 /* XibConverterCoreTests */,
 			);
@@ -249,9 +252,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA000001 /* XibToSwiftUIApp.swift in Sources */,
+				AA000001 /* SpreadingAromaApp.swift in Sources */,
 				AA000002 /* ContentView.swift in Sources */,
 				AA000003 /* ConverterStore.swift in Sources */,
+				AA000013 /* XibLivePreview.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,7 +338,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibToSwiftUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.SpreadingAroma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -351,7 +355,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.XibToSwiftUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shubhransh.SpreadingAroma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -409,7 +413,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CL000001 /* Build configuration list for PBXProject "XibToSwiftUI" */ = {
+		CL000001 /* Build configuration list for PBXProject "SpreadingAroma" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BC000001 /* Debug */,
@@ -418,7 +422,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CL000002 /* Build configuration list for PBXNativeTarget "XibToSwiftUI" */ = {
+		CL000002 /* Build configuration list for PBXNativeTarget "SpreadingAroma" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BC000003 /* Debug */,

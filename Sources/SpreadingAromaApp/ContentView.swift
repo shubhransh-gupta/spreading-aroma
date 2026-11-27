@@ -9,9 +9,9 @@ private extension UTType {
 private struct AdaptiveGlassCard: ViewModifier {
     func body(content: Content) -> some View {
         if #available(macOS 26.0, *) {
-            content.glassEffect(in: .rect(cornerRadius: 16))
+            content.glassEffect(in: .rect(cornerRadius: 18))
         } else {
-            content.background(.ultraThinMaterial, in: .rect(cornerRadius: 16))
+            content.background(.ultraThinMaterial, in: .rect(cornerRadius: 18))
         }
     }
 }
@@ -24,24 +24,29 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             sidebar
+                .searchable(text: $store.searchQuery, prompt: "Filter XIB screens")
         } detail: {
             detailPane
         }
-        .navigationTitle("XibToSwiftUI")
+        .navigationTitle("Spreading Aroma")
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button("Upload .zip / .xib", systemImage: "square.and.arrow.down") {
                     showingImporter = true
                 }
-                Button("Sample", systemImage: "wand.and.stars") {
+                Button("Sample", systemImage: "flame") {
                     store.loadSample()
                 }
                 Button("Copy SwiftUI", systemImage: "doc.on.doc") {
                     store.copySelectedCode()
                 }
                 .disabled(store.selectedFile == nil)
-                Button("Export All", systemImage: "folder.badge.plus") {
+                Button("Export Folder", systemImage: "folder.badge.plus") {
                     store.exportAllToFolder()
+                }
+                .disabled(store.files.isEmpty)
+                Button("Export .zip", systemImage: "archivebox") {
+                    store.exportAsZip()
                 }
                 .disabled(store.files.isEmpty)
             }
@@ -75,8 +80,8 @@ struct ContentView: View {
 
     private var sidebar: some View {
         List(selection: $store.selectedFileID) {
-            Section("Converted XIBs (\(store.files.count))") {
-                ForEach(store.files) { item in
+            Section("Recipes (\(store.filteredFiles.count) XIBs • \(store.totalElementCount) nodes)") {
+                ForEach(store.filteredFiles) { item in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(item.fileName)
                             .font(.headline)
@@ -88,17 +93,17 @@ struct ContentView: View {
                 }
             }
         }
-        .navigationSplitViewColumnWidth(min: 220, ideal: 260)
+        .navigationSplitViewColumnWidth(min: 230, ideal: 270)
     }
 
     @ViewBuilder
     private var detailPane: some View {
         if let selected = store.selectedFile {
             HSplitView {
-                sourceInspector(for: selected)
-                    .frame(minWidth: 280)
+                leftInspector(for: selected)
+                    .frame(minWidth: 320)
                 swiftUIPreviewPane(for: selected)
-                    .frame(minWidth: 360)
+                    .frame(minWidth: 380)
             }
             .safeAreaInset(edge: .bottom) {
                 HStack {
@@ -106,9 +111,13 @@ struct ContentView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Toggle("Raw XIB XML", isOn: $store.showRawXML)
-                        .toggleStyle(.switch)
-                        .controlSize(.small)
+                    Picker("View", selection: $store.inspectorMode) {
+                        ForEach(InspectorMode.allCases) { mode in
+                            Text(mode.rawValue).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(maxWidth: 280)
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
@@ -121,44 +130,43 @@ struct ContentView: View {
 
     private var emptyDropZone: some View {
         VStack(spacing: 16) {
-            Image(systemName: "archivebox.fill")
+            Image(systemName: "flame.fill")
                 .font(.system(size: 48))
-                .foregroundStyle(.tint)
-            Text("Drop a .zip of XIB files here")
-                .font(.title2.bold())
-            Text("Converts Interface Builder .xib views head-to-head into clean SwiftUI.")
+                .foregroundStyle(.orange)
+            Text("Spreading Aroma")
+                .font(.largeTitle.bold())
+            Text("Drop a .zip of Interface Builder .xib files to infuse them head-to-head into SwiftUI.")
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 420)
             HStack(spacing: 12) {
                 Button("Choose .zip or .xib") { showingImporter = true }
                     .buttonStyle(.borderedProminent)
-                Button("Load Sample XIB") { store.loadSample() }
+                    .tint(.orange)
+                Button("Load Sample Recipe") { store.loadSample() }
                     .buttonStyle(.bordered)
             }
         }
         .padding(36)
         .modifier(AdaptiveGlassCard())
         .overlay {
-            RoundedRectangle(cornerRadius: 16)
-                .strokeBorder(isDropTargeted ? Color.accentColor : Color.clear, lineWidth: 2)
+            RoundedRectangle(cornerRadius: 18)
+                .strokeBorder(isDropTargeted ? Color.orange : Color.clear, lineWidth: 2)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
     }
 
-    private func sourceInspector(for file: ConvertedXibFile) -> some View {
+    private func leftInspector(for file: ConvertedXibFile) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(store.showRawXML ? "XIB XML — \(file.fileName)" : "Parsed XIB Hierarchy — \(file.fileName)")
+            Text("\(store.inspectorMode.rawValue) — \(file.fileName)")
                 .font(.subheadline.weight(.semibold))
                 .padding(10)
             Divider()
-            if store.showRawXML {
-                ScrollView([.vertical, .horizontal]) {
-                    Text(file.rawXML)
-                        .font(.system(.caption, design: .monospaced))
-                        .textSelection(.enabled)
-                        .padding(12)
-                }
-            } else {
+            switch store.inspectorMode {
+            case .preview:
+                XibLivePreview(nodes: file.rootNodes)
+            case .hierarchy:
                 List(file.rootNodes, children: \.optionalChildren) { node in
                     HStack {
                         Text(node.kind.rawValue)
@@ -169,6 +177,13 @@ struct ContentView: View {
                                 .lineLimit(1)
                         }
                     }
+                }
+            case .xml:
+                ScrollView([.vertical, .horizontal]) {
+                    Text(file.rawXML)
+                        .font(.system(.caption, design: .monospaced))
+                        .textSelection(.enabled)
+                        .padding(12)
                 }
             }
         }
