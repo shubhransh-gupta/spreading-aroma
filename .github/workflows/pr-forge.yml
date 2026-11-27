@@ -20,8 +20,8 @@ jobs:
   forge:
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/forge')) ||
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'pr-forge'))
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/forge'))
     runs-on: macos-latest
     permissions:
       contents: write
@@ -32,7 +32,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run PR Forge (GitHub Marketplace Action)
+      - name: Run PR Forge Bot (GitHub Marketplace Action)
         uses: shubhransh-gupta/pr-forge@v1
         with:
           api-key: ${{ secrets.GEMINI_API_KEY }}
