@@ -41,7 +41,7 @@ jobs:
       - name: Run PR Forge Bot (GitHub Marketplace Action)
         uses: shubhransh-gupta/pr-forge@v1
         with:
-          api-key: ${{ secrets.GEMINI_API_KEY }}
+          api-key: ${{ secrets.GEMINI_API_KEY || secrets.ANTHROPIC_API_KEY || secrets.OPENAI_API_KEY }}
           figma-token: ${{ secrets.FIGMA_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ inputs.pr_number }}
