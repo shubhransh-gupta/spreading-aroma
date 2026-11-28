@@ -9,6 +9,21 @@ public enum ReportGenerator {
     }
 }
 
+public enum JSONMetadataGenerator {
+    private struct FileMetadata: Codable {
+        let fileName: String
+        let elementCount: Int
+        let suggestedSwiftFileName: String
+    }
+
+    public static func generate(files: [ConvertedXibFile]) throws -> String {
+        let meta = files.map { FileMetadata(fileName: $0.fileName, elementCount: $0.elementCount, suggestedSwiftFileName: $0.suggestedSwiftFileName) }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        return String(decoding: try encoder.encode(meta), as: UTF8.self)
+    }
+}
+
 public enum SwiftUIOptimizer {
     public static func optimize(_ code: String) -> String {
         let res = code.replacingOccurrences(of: #"\.foregroundStyle\(\.primary\)\n?"#, with: "", options: .regularExpression)
