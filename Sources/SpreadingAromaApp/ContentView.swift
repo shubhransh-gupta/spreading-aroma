@@ -37,6 +37,11 @@ struct ContentView: View {
                 Button("Sample", systemImage: "flame") {
                     store.loadSample()
                 }
+                Button("Optimize", systemImage: "sparkles") {
+                    store.optimizeSwiftUI.toggle()
+                }
+                .symbolVariant(store.optimizeSwiftUI ? .fill : .none)
+                .help("Simplify SwiftUI code")
                 Button("Copy SwiftUI", systemImage: "doc.on.doc") {
                     store.copySelectedCode()
                 }
@@ -201,7 +206,8 @@ struct ContentView: View {
             .padding(10)
             Divider()
             ScrollView([.vertical, .horizontal]) {
-                Text(file.swiftUICode)
+                let code = store.optimizeSwiftUI ? SwiftUIOptimizer.optimize(file.swiftUICode) : file.swiftUICode
+                Text(code)
                     .font(.system(.body, design: .monospaced))
                     .textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)

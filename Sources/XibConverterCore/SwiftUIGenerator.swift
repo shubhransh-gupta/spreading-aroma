@@ -9,6 +9,19 @@ public enum ReportGenerator {
     }
 }
 
+public enum SwiftUIOptimizer {
+    public static func optimize(_ code: String) -> String {
+        let res = code.replacingOccurrences(of: #"\.foregroundStyle\(\.primary\)\n?"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"\.opacity\(1\.00\)\n?"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"(?m)^(\s+)Group \{\n\s{4}(.+)\n\1\}"#, with: "$1$2", options: .regularExpression)
+        var lines = [String]()
+        res.enumerateLines { l, _ in
+            if !l.trimmingCharacters(in: .whitespaces).isEmpty || lines.last?.isEmpty == false { lines.append(l) }
+        }
+        return lines.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
 public enum SwiftUIGenerator {
     public static func statistics(from nodes: [XibNode]) -> (views: Int, controls: Int, containers: Int) {
         func flatten(_ n: XibNode) -> [XibNode] { [n] + n.children.flatMap(flatten) }
@@ -230,9 +243,7 @@ public enum SwiftUIGenerator {
     }
 }
 
-// MARK: - SwiftUI Optimizer
-
-public enum SwiftUIOptimizer {
+enum _RedundantOptimizer {
     /// Simplifies generated SwiftUI code:
     /// - Collapses single-child `Group { … }` wrappers
     /// - Strips default `.foregroundStyle(.primary)` and `.opacity(1.00)` modifiers

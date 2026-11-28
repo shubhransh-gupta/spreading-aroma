@@ -188,7 +188,7 @@ public struct ConvertedXibFile: Identifiable, Sendable, Hashable {
     public let sourcePath: String
     public let rawXML: String
     public let rootNodes: [XibNode]
-    public let swiftUICode: String
+    public var swiftUICode: String
 
     public init(
         id: UUID = UUID(),
