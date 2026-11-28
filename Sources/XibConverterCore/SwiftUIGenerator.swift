@@ -32,6 +32,10 @@ public enum SwiftUIGenerator {
         return (views, controls, containers)
     }
 
+    public static func maxDepth(of nodes: [XibNode]) -> Int {
+        nodes.lazy.map { 1 + maxDepth(of: $0.children) }.max() ?? 0
+    }
+
     private final class StateCollector {
         var declarations: [String] = []
         private var counter = 0

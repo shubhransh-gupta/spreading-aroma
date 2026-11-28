@@ -34,6 +34,12 @@ import Testing
     #expect(stats.containers == 2)
 }
 
+@Test func calculatesMaxDepthForSampleLogin() throws {
+    let nodes = try XibParser.parse(data: Data(SampleXib.sampleLoginXML.utf8))
+    #expect(SwiftUIGenerator.maxDepth(of: nodes) == 3)
+    #expect(SwiftUIGenerator.maxDepth(of: []) == 0)
+}
+
 @Test func parsesAndConvertsSampleLoginXibWithRichAttributes() throws {
     let converted = try SampleXib.makeSampleConvertedFile()
     #expect(converted.suggestedSwiftFileName == "LoginView.swift")
