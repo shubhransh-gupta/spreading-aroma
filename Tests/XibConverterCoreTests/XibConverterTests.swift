@@ -10,6 +10,23 @@ import Testing
     #expect(report.contains("Total Nodes Across All Files: 8"))
 }
 
+@Test func jsonMetadataGeneratorProducesValidJSON() throws {
+    let file = try SampleXib.makeSampleConvertedFile()
+    let json = try JSONMetadataGenerator.generate(files: [file])
+    
+    struct Meta: Codable {
+        let fileName: String
+        let elementCount: Int
+        let suggestedSwiftFileName: String
+    }
+    
+    let decoded = try JSONDecoder().decode([Meta].self, from: Data(json.utf8))
+    #expect(decoded.count == 1)
+    #expect(decoded[0].fileName == "LoginView.xib")
+    #expect(decoded[0].elementCount == 8)
+    #expect(decoded[0].suggestedSwiftFileName == "LoginView.swift")
+}
+
 @Test func formatCodeStripsWhitespaceAndIndents() {
     let input = """
     struct TestView: View {
