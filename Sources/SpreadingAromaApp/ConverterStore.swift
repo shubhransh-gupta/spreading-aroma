@@ -38,6 +38,10 @@ final class ConverterStore {
         files.reduce(0) { $0 + $1.elementCount }
     }
 
+    var totalLineCount: Int {
+        files.reduce(0) { $0 + $1.lineCount }
+    }
+
     func importURLs(_ urls: [URL]) {
         errorMessage = nil
         do {
@@ -45,7 +49,7 @@ final class ConverterStore {
             let converted = try xibURLs.map(XibParser.convert(url:))
             files = converted
             selectedFileID = converted.first?.id
-            statusMessage = "Infused \(converted.count) XIB file(s) (\(totalElementCount) nodes) into SwiftUI."
+            statusMessage = "Infused \(converted.count) XIB file(s) (\(totalLineCount) lines) into SwiftUI."
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -57,7 +61,7 @@ final class ConverterStore {
             let sample = try SampleXib.makeSampleConvertedFile()
             files = [sample]
             selectedFileID = sample.id
-            statusMessage = "Loaded sample LoginView.xib."
+            statusMessage = "Loaded sample LoginView.xib (\(sample.lineCount) lines)."
         } catch {
             errorMessage = error.localizedDescription
         }

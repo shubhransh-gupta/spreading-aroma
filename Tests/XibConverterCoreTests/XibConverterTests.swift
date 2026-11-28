@@ -13,6 +13,8 @@ import Testing
 @Test func parsesAndConvertsSampleLoginXibWithRichAttributes() throws {
     let converted = try SampleXib.makeSampleConvertedFile()
     #expect(converted.suggestedSwiftFileName == "LoginView.swift")
+    #expect(converted.lineCount > 10)
     #expect(converted.elementCount == 8)
+
     #expect(converted.swiftUICode.contains("struct LoginView: View"))
 }

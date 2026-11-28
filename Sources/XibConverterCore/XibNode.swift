@@ -210,6 +210,10 @@ public struct ConvertedXibFile: Identifiable, Sendable, Hashable {
         rootNodes.reduce(0) { $0 + $1.totalNodeCount }
     }
 
+    public var lineCount: Int {
+        swiftUICode.components(separatedBy: .newlines).count
+    }
+
     public var suggestedSwiftFileName: String {
         SwiftUIGenerator.sanitizedViewName(from: fileName) + ".swift"
     }
