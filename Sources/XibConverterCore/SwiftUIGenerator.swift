@@ -13,10 +13,18 @@ public enum SwiftUIGenerator {
         }
     }
 
+    /// Cleans up generated code: trims trailing spaces, collapses multiple empty lines, and trims file ends.
     public static func formatCode(_ code: String) -> String {
         code.components(separatedBy: .newlines)
             .map { $0.trimmingTrailingSpaces() }
+            .reduce(into: [String]()) { res, line in
+                // Collapse multiple consecutive empty lines into one
+                if !(line.isEmpty && res.last?.isEmpty == true) {
+                    res.append(line)
+                }
+            }
             .joined(separator: "\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     public static func sanitizedViewName(from fileName: String) -> String {
@@ -70,7 +78,14 @@ public enum SwiftUIGenerator {
 }
 
 extension String {
+    /// Efficiently removes trailing whitespace from a line.
     func trimmingTrailingSpaces() -> String {
-        replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
+        var end = endIndex
+        while end > startIndex {
+            let prev = index(before: end)
+            if !self[prev].isWhitespace { break }
+            end = prev
+        }
+        return String(self[..<end])
     }
 }
