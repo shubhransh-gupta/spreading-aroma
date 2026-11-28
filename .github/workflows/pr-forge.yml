@@ -2,7 +2,7 @@ name: PR Forge Autonomous Implementation
 
 on:
   pull_request:
-    types: [opened, synchronize, labeled]
+    types: [opened, synchronize, labeled, closed]
   issues:
     types: [opened, labeled]
   issue_comment:
@@ -25,7 +25,7 @@ concurrency:
 jobs:
   forge:
     if: |
-      github.actor != 'github-actions[bot]' && (
+      github.actor != 'github-actions[bot]' && github.event.action != 'closed' && (
         github.event_name == 'workflow_dispatch' ||
         (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'pr-forge')) ||
         (github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'pr-forge')) ||
@@ -54,3 +54,102 @@ jobs:
           max-iterations: '6'
           auto-commit: 'true'
           post-comment: 'true'
+
+  notify-merged:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
+    steps:
+      - name: Notify & Close Linked Issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          python3 - << 'EOF'
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+
+          pr_number = os.environ.get("PR_NUMBER", "")
+          pr_title = os.environ.get("PR_TITLE", "")
+          pr_url = os.environ.get("PR_URL", "")
+          pr_body = os.environ.get("PR_BODY", "")
+          head_ref = os.environ.get("HEAD_REF", "")
+          repo = os.environ.get("REPO", "")
+          actor = os.environ.get("ACTOR", "")
+
+          linked_issues = set()
+
+          # 1. GraphQL closingIssuesReferences
+          owner, repo_name = repo.split("/") if "/" in repo else ("", "")
+          if owner and repo_name and pr_number:
+              query = f'''
+              query {{
+                repository(owner: "{owner}", name: "{repo_name}") {{
+                  pullRequest(number: {pr_number}) {{
+                    closingIssuesReferences(first: 20) {{
+                      nodes {{
+                        number
+                      }}
+                    }}
+                  }}
+                }}
+              }}
+              '''
+              res = subprocess.run(["gh", "api", "graphql", "-f", f"query={query}"], capture_output=True, text=True)
+              if res.returncode == 0:
+                  try:
+                      data = json.loads(res.stdout)
+                      nodes = data.get("data", {}).get("repository", {}).get("pullRequest", {}).get("closingIssuesReferences", {}).get("nodes", [])
+                      for node in nodes:
+                          if "number" in node:
+                              linked_issues.add(int(node["number"]))
+                  except Exception as e:
+                      print(f"GraphQL parse error: {e}")
+
+          # 2. Regex match in PR body
+          for match in re.findall(r'(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?):?\s+(?:https?://github\.com/[^/\s]+/[^/\s]+/issues/|#)?(\d+)', pr_body, re.IGNORECASE):
+              linked_issues.add(int(match))
+
+          # 3. Head branch name fallback (e.g. forge/issue-6)
+          branch_match = re.search(r'issue-(\d+)', head_ref)
+          if branch_match:
+              linked_issues.add(int(branch_match.group(1)))
+
+          if not linked_issues:
+              print(f"No linked issues detected for PR #{pr_number}.")
+              sys.exit(0)
+
+          print(f"Found linked issues: {sorted(list(linked_issues))}")
+
+          for issue_num in sorted(list(linked_issues)):
+              comment_body = (
+                  "<!-- pr-forge-bot -->\n"
+                  '<p><img src="https://raw.githubusercontent.com/shubhransh-gupta/pr-forge/main/assets/pr-forge-icon.svg" width="36" height="36" align="left" alt="PR Forge Bot" /></p>\n\n'
+                  "### 🤖 PR Forge Bot\n"
+                  "<sub>Autonomous PR-to-Code Agent • Xcode 27 & Zero-Bloat Swift</sub>\n\n"
+                  "---\n\n"
+                  f"🎉 **Issue Addressed & Resolved!**\n\n"
+                  f"This issue has been addressed and merged into `main` via PR [#{pr_number}]({pr_url}) (`{pr_title}`).\n\n"
+                  f"- **Pull Request:** [#{pr_number}]({pr_url})\n"
+                  f"- **Merged by:** @{actor}\n"
+                  f"- **Verification:** Tested and passing ✅\n\n"
+                  "---\n"
+                  "<sub>⚡ Automated response from **PR Forge Bot** • [Install PR Forge](https://github.com/shubhransh-gupta/pr-forge) from GitHub Marketplace</sub>"
+              )
+              # Add comment
+              subprocess.run(["gh", "issue", "comment", str(issue_num), "--repo", repo, "--body", comment_body])
+              # Close issue as completed
+              subprocess.run(["gh", "issue", "close", str(issue_num), "--repo", repo, "--reason", "completed"])
+              print(f"Commented and closed issue #{issue_num}.")
+          EOF

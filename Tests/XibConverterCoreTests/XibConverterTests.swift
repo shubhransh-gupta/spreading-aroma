@@ -26,6 +26,14 @@ import Testing
     #expect(formatted.contains("        Text(\"Hi\")"))
 }
 
+@Test func calculatesNodeStatisticsForSampleLogin() throws {
+    let nodes = try XibParser.parse(data: Data(SampleXib.sampleLoginXML.utf8))
+    let stats = SwiftUIGenerator.statistics(from: nodes)
+    #expect(stats.views == 3)
+    #expect(stats.controls == 3)
+    #expect(stats.containers == 2)
+}
+
 @Test func parsesAndConvertsSampleLoginXibWithRichAttributes() throws {
     let converted = try SampleXib.makeSampleConvertedFile()
     #expect(converted.suggestedSwiftFileName == "LoginView.swift")

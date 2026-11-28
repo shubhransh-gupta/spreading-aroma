@@ -23,6 +23,15 @@ public enum SwiftUIOptimizer {
 }
 
 public enum SwiftUIGenerator {
+    public static func statistics(from nodes: [XibNode]) -> (views: Int, controls: Int, containers: Int) {
+        func flatten(_ n: XibNode) -> [XibNode] { [n] + n.children.flatMap(flatten) }
+        let all = nodes.flatMap(flatten)
+        let views = all.filter { $0.kind == .label || $0.kind == .imageView }.count
+        let controls = all.filter { [.button, .textField, .textView, .switch, .slider, .segmentedControl, .progressView, .activityIndicatorView].contains($0.kind) }.count
+        let containers = all.filter { [.view, .stackView, .scrollView, .tableView, .collectionView, .visualEffectView].contains($0.kind) }.count
+        return (views, controls, containers)
+    }
+
     private final class StateCollector {
         var declarations: [String] = []
         private var counter = 0
