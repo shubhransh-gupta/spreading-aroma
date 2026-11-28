@@ -80,7 +80,7 @@ struct ContentView: View {
 
     private var sidebar: some View {
         List(selection: $store.selectedFileID) {
-            Section("Recipes (\(store.filteredFiles.count) XIBs • \(store.totalElementCount) nodes)") {
+            Section("Recipes (\(store.filteredFiles.count) XIBs • \(store.totalLineCount) lines)") {
                 ForEach(store.filteredFiles) { item in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(item.fileName)
