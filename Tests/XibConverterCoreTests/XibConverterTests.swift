@@ -121,6 +121,13 @@ import Testing
     #expect(FileManager.default.fileExists(atPath: exportZipURL.path))
 }
 
+@Test func colorFormatterConvertsToHexStrings() {
+    #expect(ColorFormatter.hexString(red: 1, green: 0, blue: 0) == "#FF0000")
+    #expect(ColorFormatter.hexString(red: 0, green: 1, blue: 0) == "#00FF00")
+    #expect(ColorFormatter.hexString(red: 1, green: 1, blue: 1) == "#FFFFFF")
+    #expect(ColorFormatter.hexString(red: 0, green: 0, blue: 1, alpha: 0.5) == "#0000FF80")
+}
+
 // MARK: - SwiftUI Optimizer Tests
 
 @Test func optimizerCollapsesRedundantSingleChildGroup() {
