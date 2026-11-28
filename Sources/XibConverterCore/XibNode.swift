@@ -218,3 +218,12 @@ public struct ConvertedXibFile: Identifiable, Sendable, Hashable {
         SwiftUIGenerator.sanitizedViewName(from: fileName) + ".swift"
     }
 }
+
+public enum ColorFormatter {
+    /// Formats normalized 0.0...1.0 RGBA components into standard uppercase #RRGGBB (or #RRGGBBAA if alpha != 1.0).
+    public static func hexString(red: Double, green: Double, blue: Double, alpha: Double = 1.0) -> String {
+        let comps = [red, green, blue, alpha].map { Int(($0 * 255).rounded()) }
+        let base = String(format: "#%02X%02X%02X", comps[0], comps[1], comps[2])
+        return alpha >= 1.0 ? base : base + String(format: "%02X", comps[3])
+    }
+}
