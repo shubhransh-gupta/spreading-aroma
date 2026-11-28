@@ -21,6 +21,7 @@ final class ConverterStore {
     var inspectorMode: InspectorMode = .preview
     var statusMessage: String = "Drop a .zip of .xib files or upload directly."
     var errorMessage: String?
+    var optimizeSwiftUI = true
 
     var filteredFiles: [ConvertedXibFile] {
         guard !searchQuery.trimmingCharacters(in: .whitespaces).isEmpty else { return files }
@@ -68,10 +69,11 @@ final class ConverterStore {
     }
 
     func copySelectedCode() {
-        guard let code = selectedFile?.swiftUICode else { return }
+        guard let file = selectedFile else { return }
+        let code = optimizeSwiftUI ? SwiftUIOptimizer.optimize(file.swiftUICode) : file.swiftUICode
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(code, forType: .string)
-        statusMessage = "Copied \(selectedFile?.suggestedSwiftFileName ?? "SwiftUI") to clipboard."
+        statusMessage = "Copied \(file.suggestedSwiftFileName) to clipboard."
     }
 
     func exportAllToFolder() {
@@ -83,7 +85,8 @@ final class ConverterStore {
         panel.prompt = "Export SwiftUI Files"
         guard panel.runModal() == .OK, let dir = panel.url else { return }
         do {
-            let exported = try SampleXib.exportAll(files, to: dir)
+            let finalFiles = optimizeSwiftUI ? files.map { var f = $0; f.swiftUICode = SwiftUIOptimizer.optimize(f.swiftUICode); return f } : files
+            let exported = try SampleXib.exportAll(finalFiles, to: dir)
             statusMessage = "Exported \(exported.count) SwiftUI file(s) to \(dir.lastPathComponent)."
         } catch {
             errorMessage = error.localizedDescription
@@ -98,7 +101,8 @@ final class ConverterStore {
         panel.prompt = "Export .zip"
         guard panel.runModal() == .OK, let destURL = panel.url else { return }
         do {
-            try SampleXib.exportAsZip(files, to: destURL)
+            let finalFiles = optimizeSwiftUI ? files.map { var f = $0; f.swiftUICode = SwiftUIOptimizer.optimize(f.swiftUICode); return f } : files
+            try SampleXib.exportAsZip(finalFiles, to: destURL)
             statusMessage = "Packaged \(files.count) SwiftUI file(s) into \(destURL.lastPathComponent)."
         } catch {
             errorMessage = error.localizedDescription
